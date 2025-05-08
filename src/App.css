@@ -1,42 +1,66 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+body {
+  background-color: #555;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Ya no al centro vertical */
+  min-height: 100vh;
+  margin: 0;
+  padding-top: 15vh; /* Espacio superior */
+}
+
+.LoginCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 10px;
   padding: 2rem;
+  width: 100%;
+  max-height: 500px;
+  max-width: 700px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+h1{
+  color: black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 6%;
+  font-size: 2.5em;
+}
+
+#experience{
+  color: rgb(255, 255, 255);
+  margin: 3%;
+  padding: 1.5%;
   text-align: center;
+  border-color: black;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  padding: 5px;
+  padding-bottom: 7px;
+  font-family: inherit;
+  
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+#experience:hover{
+  background-color: rgb(114, 164, 255);
+  border-color: #000000;
+  transition: background-color 0.5s;
+  cursor: pointer;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input{
+  margin: 2%;
+  border-radius: 8px;
+  border: 1px solid black;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #fffbfb;
+  color: rgb(0, 0, 0);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+#footerLoginCard{
+  margin:5%;
 }
