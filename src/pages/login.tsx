@@ -146,47 +146,109 @@ const Login: React.FC = () => {
     }
 
     return (
-        <section className="LoginCard bg-gray-100 h-screen flex items-center justify-center">
-            <h1>{textTitle}</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3 items-center w-full">
-                {isOn ? (
-                    // Content for Sign in
-                    <>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre" className="p-2 border rounded" required minLength={3} maxLength={25}/>
-                        <input type="text" value={user} onChange={(e) => setUser(e.target.value)} placeholder="Nombre de usuario" className="p-2 border rounded" required minLength={3} maxLength={15}/>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="p-2 border rounded" required minLength={8} maxLength={30}/>
-                        <select name="selectExperience" value={experience} onChange={(e) => setExperience(e.target.value)} id="experience" className="bg-blue-500" required>
-                            <option value="" disabled hidden>Experiencia</option>
-                            <option value="Experto">Experto</option>
-                            <option value="Intermedio">Intermedio</option>
-                            <option value="Principiante">Principiante</option>
-                        </select>
-                    </>
-                ) : (
-                    // Content for Login
-                    <>
-                        <input type="text" value={user} onChange={(e) => setUser(e.target.value)} placeholder="Nombre de usuario" className="p-2 border rounded" required minLength={3} maxLength={10}/>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="p-2 border rounded" required minLength={8} maxLength={30}/>
-                    </>
-                )}
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-                        {isOn ? "Registrarse" : "Entrar"}
-                </button>
-            </form>
+  <section className="h-screen w-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 flex items-center justify-center">
+  <div className="bg-white/10 backdrop-blur-lg shadow-2xl rounded-3xl p-10 w-full max-w-md border border-white/30">
+      <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">{textTitle}</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {isOn ? (
+          // Content for Sign in
+          <>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Nombre"
+              className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              minLength={3}
+              maxLength={25}
+            />
+            <input
+              type="text"
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+              placeholder="Nombre de usuario"
+              className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              minLength={3}
+              maxLength={15}
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              minLength={8}
+              maxLength={30}
+            />
+            <select
+              name="selectExperience"
+              value={experience}
+              onChange={(e) => setExperience(e.target.value)}
+              id="experience"
+                className="w-full p-3 mt-2 rounded-md bg-black text-black"
+              required
+            >
+              <option value="" disabled hidden>
+                Experiencia
+              </option>
+              <option value="Experto">Experto</option>
+              <option value="Intermedio">Intermedio</option>
+              <option value="Principiante">Principiante</option>
+            </select>
+          </>
+        ) : (
+          // Content for Login
+          <>
+            <input
+              type="text"
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+              placeholder="Nombre de usuario"
+              className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              minLength={3}
+              maxLength={20}
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              minLength={8}
+              maxLength={30}
+            />
+          </>
+        )}
+        <button
+  type="submit"
+  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
+>
+  {isOn ? "Registrarse" : "Entrar"}
+</button>
 
-            <footer id="footerLoginCard">
-                <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                        type="checkbox"
-                        checked={isOn}
-                        onChange={toggle}
-                        className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-red-500 rounded-full peer-checked:bg-green-500 transition-colors"></div>
-                    <div className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
-                </label>
-            </footer>
-        </section>
-    );
+      </form>
+      <footer className="mt-6 flex justify-center items-center">
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={isOn}
+            onChange={toggle}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-green-500 transition-colors"></div>
+          <div className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-full"></div>
+        </label>
+        <span className="ml-3 text-white font-medium">
+          {isOn ? "Modo Registro" : "Modo Login"}
+        </span>
+      </footer>
+    </div>
+  </section>
+);
 };
 export default Login;
