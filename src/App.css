@@ -92,3 +92,44 @@ input{
 .graph{
   background-color: yellowgreen;
 }
+
+.controls-container {
+  position: absolute;
+  top: 50%; /* Centra verticalmente */
+  right: 2cm; /* Posiciona a 2 cm de la derecha */
+  transform: translateY(-50%); /* Ajusta el centrado vertical */
+  width: 300px; /* Ancho fijo para el contenedor */
+  background-color: #f9f9f9; /* Fondo claro */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+.controls {
+  margin-bottom: 20px;
+}
+
+.routes-container {
+  margin-top: 20px;
+}
+
+.route-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.route-card h3 {
+  margin-bottom: 10px;
+}
+
+.route-card p {
+  margin: 5px 0;
+}
+
+.route-card button {
+  margin-top: 10px;
+}
