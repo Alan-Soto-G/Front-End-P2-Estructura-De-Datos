@@ -1,0 +1,37 @@
+/* Resetea márgenes y rellenos globales */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Asegura que ocupen toda la pantalla */
+  width: 100%; /* Asegura que ocupen todo el ancho */
+  overflow: hidden; /* Elimina cualquier scroll global */
+}
+.graph-container {
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  width: 100vw; /* Ocupa todo el ancho de la pantalla */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9; /* Fondo claro */
+  overflow: hidden; /* Elimina el scroll */
+  margin: 0; /* Elimina márgenes */
+  padding: 0; /* Elimina relleno */
+}
+
+.graph-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333; /* Color del texto */
+}
+
+.graph-box {
+  height: 100%; /* Ocupa el 100% del contenedor */
+  width: 100%; /* Ocupa el 100% del contenedor */
+  border: 2px solid #4caf50; /* Borde verde */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+  background-color: white; /* Fondo blanco */
+  overflow: hidden; /* Asegura que no haya scroll dentro del grafo */
+}

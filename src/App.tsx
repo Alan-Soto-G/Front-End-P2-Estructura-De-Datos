@@ -3,6 +3,7 @@ import './App.css'
 import Login  from './pages/login'
 import Profile from './pages/userProfile'
 import UserRoute from './pages/userRoute';
+import GraphMap from './components/graphMap';
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login/>} />
-        <Route path="/userRoute" element={<UserRoute/>} />
+        <Route path="/userRoute" element={<UserRoute />} />
+        <Route path="/map" element={<GraphMap/>} />
       </Routes>
     </BrowserRouter>
   )
