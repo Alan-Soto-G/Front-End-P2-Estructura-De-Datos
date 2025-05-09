@@ -87,7 +87,7 @@ const GraphMap: React.FC = () => {
 
 return (
   <div className="graph-container">
-    <h2 className="graph-title">Mapa de Grafo</h2>
+    <h2 className="graph-title">Tu mapa</h2>
     <div
       ref={graphContainerRef}
       className="graph-box"
