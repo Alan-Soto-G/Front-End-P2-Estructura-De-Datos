@@ -9,7 +9,7 @@ interface GraphManagementProps {
 
 const GraphManagement: React.FC<GraphManagementProps> = ({visible, title, node}) => {
     if(!visible) return null; // If not visible, return null
-
+    console.log(localStorage.getItem("userMap"));
     return (
         <section className='management-card'>
             <h1>{title}</h1>

@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
-
-    const [isOn, setIsOn] = useState(false);
-    const [textTitle, setTextTitle] = useState("Login");
+    localStorage.clear();
+    const [isOn, setIsOn] = useState(false); // State variable for switch
+    const [textTitle, setTextTitle] = useState("Login"); // State variable for title card
 
     // State variables for forms
     const [name, setName] = useState("");
@@ -13,48 +13,39 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState("");
     const [experience, setExperience] = useState("");
     
-    const toggle = () => {
+    const toggle = () => { // Function to toggle the switch
         setIsOn(!isOn);
         setTextTitle(isOn ? "Login" : "Sign in");
         console.log("Estado del switch:", !isOn ? "ON" : "OFF");
     };
 
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    const navigate = useNavigate(); // Hook to navigate between routes
+    const currentDate = () =>{// Function to get the current date in YYYY/MM/DD format
+        const date = new Date()
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        const formatedDate = `${year}/${month}/${day}`;
+        return formatedDate;
+    }
+    const handleSubmit = async (e: React.FormEvent) => { // Function to handle form submission
         e.preventDefault();
         let data = {};
-
+        let dataMap = {}
+        const actualDate = currentDate();
         if (isOn) {
-
-            const fechaActual = new Date();
-            const año = fechaActual.getFullYear();
-            const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
-            const dia = String(fechaActual.getDate()).padStart(2, '0');
-            const fechaFormateada = `${año}/${mes}/${dia}`;
-
             data = {
                 name: name,
                 username: user,
                 password: password,
-                registration_date: fechaFormateada,
+                registration_date: actualDate,
                 experience: experience
             };
-            console.log("Registrarse ->", {
-                name,
-                user,
-                password,
-                experience,
-            });
         } else {
             data = {
                 username: user,
                 password: password
             };
-            console.log("Entrar ->", {
-                user,
-                password,
-            });
         }
 
         const url = isOn 
@@ -62,7 +53,6 @@ const Login: React.FC = () => {
             : "http://127.0.0.1:5000/login-user"; // Route for login
 
         try {
-                
             const responseLogin = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -79,7 +69,7 @@ const Login: React.FC = () => {
                 if (!isOn) {
                     if (resultLogin.success) {
                         alert("Bienvenido " + resultLogin.user.name);
-                        userId = resultLogin.user.id
+                        userId = resultLogin.user.user_id
                     }else{
                         alert("Usuario o contraseña incorrectos");
                         console.error("Error de autenticación:", resultLogin); 
@@ -87,14 +77,16 @@ const Login: React.FC = () => {
                 }else{
                     if (resultLogin.success){
                         alert(resultLogin.message);
-                        userId = resultLogin.user_id
+                        userId = resultLogin.user.user_id
                     }else{
                         alert(resultLogin.message);
                         setUser("")
                         console.error("Error de registro:", resultLogin); 
                     }
                 }
+
                 localStorage.setItem("userID", userId)
+                dataMap = { user_id: userId };
 
                 try {
                     const responseMap = await fetch("http://127.0.0.1:5000/user-map", {
@@ -102,7 +94,7 @@ const Login: React.FC = () => {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ user_id: userId }),
+                        body: JSON.stringify(dataMap),
                     });
 
                     if(responseMap.ok){
@@ -112,16 +104,19 @@ const Login: React.FC = () => {
                     }else{
                         console.error("Error en el mapa:", responseMap.status);
                     }
+
                 } catch (error) {
                     console.error("Error de red:", error);
                     alert("No se pudo conectar con el servidor");
                 }
-                localStorage.setItem("userMap", "W")
+
                 navigate("/userRoute")
+
             }else{
                 console.error("Error en el registro:", responseLogin.status);
                 alert("Error al registrar usuario");
             }
+            
         } catch (error) {
             console.error("Error de red:", error);
             alert("No se pudo conectar con el servidor");
@@ -170,7 +165,6 @@ const Login: React.FC = () => {
                 </label>
             </footer>
         </section>
-
     );
 };
 export default Login;
