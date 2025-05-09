@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
 
@@ -17,6 +18,8 @@ const Login: React.FC = () => {
         setTextTitle(isOn ? "Login" : "Sign in");
         console.log("Estado del switch:", !isOn ? "ON" : "OFF");
     };
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -56,11 +59,11 @@ const Login: React.FC = () => {
 
         const url = isOn 
             ? "http://127.0.0.1:5000/new-user"    // Route for sign in
-            : `http://127.0.0.1:5000/login-user`; // Route for login
+            : "http://127.0.0.1:5000/login-user"; // Route for login
 
         try {
                 
-            const response = await fetch(url, {
+            const responseLogin = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -68,33 +71,55 @@ const Login: React.FC = () => {
                 body: JSON.stringify(data),
             });
             
-            if (response.ok) {
-                const result = await response.json();
-                console.log(isOn ? "Registro Exitoso:" : "Ingreso Exitoso", result);
+            if (responseLogin.ok) {
+                const resultLogin = await responseLogin.json();
+                console.log(isOn ? "Registro Exitoso:" : "Ingreso Exitoso", resultLogin);
                 
-                let user_id;
+                let userId;
                 if (!isOn) {
-                    if (result.success) {
-                        alert("Bienvenido " + result.user.name);
-                        user_id = result.user.id
+                    if (resultLogin.success) {
+                        alert("Bienvenido " + resultLogin.user.name);
+                        userId = resultLogin.user.id
                     }else{
                         alert("Usuario o contraseña incorrectos");
-                        console.error("Error de autenticación:", result); 
+                        console.error("Error de autenticación:", resultLogin); 
                     }
                 }else{
-                    if (result.success){
-                        alert(result.message);
-                        user_id = result.user_id
+                    if (resultLogin.success){
+                        alert(resultLogin.message);
+                        userId = resultLogin.user_id
                     }else{
-                        alert(result.message);
+                        alert(resultLogin.message);
                         setUser("")
-                        console.error("Error de registro:", result); 
+                        console.error("Error de registro:", resultLogin); 
                     }
                 }
-                localStorage.setItem("userID", user_id)
+                localStorage.setItem("userID", userId)
 
+                try {
+                    const responseMap = await fetch("http://127.0.0.1:5000/user-map", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ user_id: userId }),
+                    });
+
+                    if(responseMap.ok){
+                        const resultMap = await responseMap.json();
+                        console.log("Mapa de usuario recuperado con éxito:", resultMap);
+                        localStorage.setItem("userMap", JSON.stringify(resultMap));
+                    }else{
+                        console.error("Error en el mapa:", responseMap.status);
+                    }
+                } catch (error) {
+                    console.error("Error de red:", error);
+                    alert("No se pudo conectar con el servidor");
+                }
+                localStorage.setItem("userMap", "W")
+                navigate("/userRoute")
             }else{
-                console.error("Error en el registro:", response.status);
+                console.error("Error en el registro:", responseLogin.status);
                 alert("Error al registrar usuario");
             }
         } catch (error) {
@@ -111,7 +136,7 @@ const Login: React.FC = () => {
                     // Content for Sign in
                     <>
                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre" className="p-2 border rounded" required minLength={3} maxLength={25}/>
-                        <input type="text" value={user} onChange={(e) => setUser(e.target.value)} placeholder="Nombre de usuario" className="p-2 border rounded" required minLength={3} maxLength={10}/>
+                        <input type="text" value={user} onChange={(e) => setUser(e.target.value)} placeholder="Nombre de usuario" className="p-2 border rounded" required minLength={3} maxLength={15}/>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" className="p-2 border rounded" required minLength={8} maxLength={30}/>
                         <select name="selectExperience" value={experience} onChange={(e) => setExperience(e.target.value)} id="experience" className="bg-blue-500" required>
                             <option value="" disabled hidden>Experiencia</option>

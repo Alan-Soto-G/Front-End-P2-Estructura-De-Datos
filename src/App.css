@@ -64,3 +64,15 @@ input{
 #footerLoginCard{
   margin:5%;
 }
+
+.management-card{
+  background-color: white;
+  padding: 30px;
+  max-width: 600px;
+  width: auto;
+  flex-direction: row;
+}
+
+.graph{
+  background-color: yellowgreen;
+}
