@@ -110,6 +110,28 @@ const Login: React.FC = () => {
                     alert("No se pudo conectar con el servidor");
                 }
 
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/get-user-data", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ user_id: userId }),
+                    });
+            
+                    if (response.ok) {
+                        const userData = await response.json();
+                        console.log("Datos del usuario recuperados con éxito:", userData);
+                        localStorage.setItem("userData", JSON.stringify(userData));
+                    } else {
+                        console.error("Error al obtener los datos del usuario:", response.status);
+                        alert("No se pudieron obtener los datos del usuario.");
+                    }
+                } catch (error) {
+                    console.error("Error de red:", error);
+                    alert("No se pudo conectar con el servidor.");
+                }
+
                 navigate("/userRoute")
 
             }else{

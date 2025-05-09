@@ -1,14 +1,25 @@
-import React from 'react';
-import { useState } from 'react';
-import Route from '../components/route';
+import React, { useState } from 'react';
 import GraphManagement from '../components/graphManagement';
 
 const UserRoute: React.FC = () => {
+    const [isGraphVisible, setIsGraphVisible] = useState(true); // Estado para controlar la visibilidad
+
+    const handleCloseGraph = () => {
+        setIsGraphVisible(false); // Oculta el componente
+    };
 
     return (
         <>
-        <GraphManagement visible={true} title="Graph Management" node={false}/>
+            {isGraphVisible && (
+                <GraphManagement
+                    visible={true}
+                    title="Nueva Ruta"
+                    node={false}
+                    onClose={handleCloseGraph} // Pasar la función para cerrar
+                />
+            )}
         </>
     );
 };
+
 export default UserRoute;
