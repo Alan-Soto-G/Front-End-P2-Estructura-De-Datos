@@ -15,75 +15,92 @@ const getColorByRiskLevel = (riskLevel: number): string => {
       return 'gray'; // Desconocido
   }
 };
-
+// Genera un color aleatorio en formato hexadecimal
+const generateRandomColor = (): string => {
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+};
 const GraphMap: React.FC = () => {
   const graphContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // Obtén los datos del localStorage y conviértelos a JSON
-    const graphDataString = localStorage.getItem('userMap');
-    const graphData = graphDataString
-      ? JSON.parse(graphDataString)
-      : { points: [], edges: [] };
+useEffect(() => {
+  const graphDataString = localStorage.getItem('userMap');
+  const routesDataString = localStorage.getItem('routes'); // Obtén las rutas del localStorage
+  const graphData = graphDataString
+    ? JSON.parse(graphDataString)
+    : { points: [], edges: [] };
+  const routesData = routesDataString ? JSON.parse(routesDataString) : [];
 
-    // Mapea los nodos y las aristas
-    const nodes = graphData.points.map((point: any) => ({
-      id: point.id,
-      label: point.name,
-      title: `${point.description}\nNivel de riesgo: ${point.risk_level}`,
-      color: getColorByRiskLevel(point.risk_level),
-    }));
+  // Genera un mapa de colores para las rutas
+  const routeColors = routesData.reduce((acc: any, route: any) => {
+    acc[route.route_id] = generateRandomColor();
+    return acc;
+  }, {});
 
-    const edges = graphData.edges.map((edge: any) => ({
+  // Mapea los nodos y las aristas
+  const nodes = graphData.points.map((point: any) => ({
+    id: point.id,
+    label: point.name,
+    title: `${point.description}\nNivel de riesgo: ${point.risk_level}`,
+    color: getColorByRiskLevel(point.risk_level),
+  }));
+
+  const edges = graphData.edges.map((edge: any) => {
+    // Busca si la arista pertenece a alguna ruta
+    const route = routesData.find((route: any) =>
+      route.points.includes(edge.from) && route.points.includes(edge.to)
+    );
+
+    return {
       from: edge.from,
       to: edge.to,
       arrows: edge.directed ? 'to' : '', // Si es dirigido, añade flecha
       label: `${edge.distance_meters} m`,
-    }));
+      color: route ? routeColors[route.route_id] : 'gray', // Asigna el color de la ruta o gris por defecto
+    };
+  });
 
-    // Configuración del grafo
-    const data = { nodes, edges };
-    const options = {
-  nodes: {
-    shape: 'dot',
-    size: 16,
-    font: {
-      size: 14,
-    },
-  },
-  edges: {
+  // Configuración del grafo
+  const data = { nodes, edges };
+  const options = {
+    nodes: {
+      shape: 'dot',
+      size: 16,
       font: {
-        
-      size: 12,
-      align: 'middle',
+        size: 14,
+      },
     },
-    color: 'gray',
-    arrows: {
-      to: { enabled: true, scaleFactor: 1 },
+    edges: {
+      font: {
+        size: 12,
+        align: 'middle',
+      },
+      color: 'gray',
+      arrows: {
+        to: { enabled: true, scaleFactor: 1 },
+      },
     },
-  },
     physics: {
-    enabled: true,
-    solver: 'forceAtlas2Based', // Usa un solver que mejora la distribución
-    stabilization: {
-      iterations: 200, // Más iteraciones para una mejor distribución
+      enabled: true,
+      solver: 'forceAtlas2Based', // Usa un solver que mejora la distribución
+      stabilization: {
+        iterations: 200, // Más iteraciones para una mejor distribución
+      },
     },
-  },
-  interaction: {
-    zoomView: false, // Deshabilita el zoom
-    dragView: false, // Deshabilita el desplazamiento
-  },
-  layout: {
-    hierarchical: false, // Cambia a true si quieres un diseño jerárquico
-    improvedLayout: true,
-  },
-};
+    interaction: {
+      zoomView: false, // Deshabilita el zoom
+      dragView: false, // Deshabilita el desplazamiento
+    },
+    layout: {
+      hierarchical: false, // Cambia a true si quieres un diseño jerárquico
+      improvedLayout: true,
+    },
+  };
 
-    // Renderiza el grafo en el contenedor
-    if (graphContainerRef.current) {
-      new Network(graphContainerRef.current, data, options);
-    }
-  }, []);
+  // Renderiza el grafo en el contenedor
+  if (graphContainerRef.current) {
+    new Network(graphContainerRef.current, data, options);
+  }
+}, []);
 
 return (
   <div className="graph-container">
